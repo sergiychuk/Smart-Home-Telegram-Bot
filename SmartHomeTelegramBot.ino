@@ -1,3 +1,5 @@
+// String keyboardJson = "[[\"0\", \"1\", \"2\", \"3\", \"4\"],[\"/status\"]]";
+
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
@@ -43,8 +45,8 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
-    blinkBuitlinLed(2);
-    //delay(50);
+    blinkBuitlinLed(1);
+    delay(250);
   }
 
   Serial.println("");
@@ -80,24 +82,18 @@ void handleNewMessages(int numNewMessages) {
 
     if (text == "/start" || text == "0") {
       userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
-      
-      String welcome = "Добро пожаловать Бро *" + from_name + "*.\n\n";
-      welcome += "`Это главное меню управления`\n";
-      welcome += "`не очень умным домом.`\n\n";
-      welcome += "`Что бы использовать меню,`\n";
-      welcome += "`достаточно отправить в чат`\n";
-      welcome += "`номер желаемой команды.`\n\n";
-      welcome += "*Меню управления:*\n";
-      welcome += "*1 -* _Балкон_\n";
-      welcome += "*2 -* _Комната_\n";
-      welcome += "*3 -* _Настройки_\n";
-      String keyboardJson = "[[\"4\", \"1\", \"2\", \"3\", \"4\"],[\"/status\"]]";
-      bot.sendMessageWithReplyKeyboard(chat_id, welcome, "Markdown", keyboardJson, true);
-    }
-    if (text == "0"){
-      userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+      String startMessage = "Добро пожаловать Бро *" + from_name + "*.\n\n";
+      startMessage += "`Это главное меню управления`\n";
+      startMessage += "`не очень умным домом.`\n\n";
+      startMessage += "`Что бы использовать меню,`\n";
+      startMessage += "`достаточно отправить в чат`\n";
+      startMessage += "`номер желаемой команды.`\n\n";
+      startMessage += "*Меню управления:*\n";
+      startMessage += "*1 -* _Балкон_\n";
+      startMessage += "*2 -* _Комната_\n";
+      startMessage += "*3 -* _Настройки_\n";
+      String keyboardJson = "[[\"1\", \"2\", \"3\"],[\"/status\"]]";
+      bot.sendMessageWithReplyKeyboard(chat_id, startMessage, "Markdown", keyboardJson, true);
     }
     if (text == "1"){
       userChatChoise = (text).toInt();
@@ -116,8 +112,7 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
     }
     if (text == "/status"){
-      bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\n", "Markdown");
-      bot.sendMessage(chat_id, "Current menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
+      bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\nCurrent menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
       return;
     }
 //    else {
