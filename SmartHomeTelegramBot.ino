@@ -1,9 +1,3 @@
-/*******************************************************************
-    An example of how to use a custom reply keyboard markup.
- *                                                                 *
- *                                                                 *
-    written by Brian Lough
- *******************************************************************/
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
@@ -22,7 +16,6 @@ int Bot_mtbs = 500; //mean time between scan messages
 long Bot_lasttime;   //last time messages' scan has been done
 
 const int ledPin = LED_BUILTIN;
-int ledStatus = 0;
 
 char* fezChatID = "391878473";
 
@@ -37,7 +30,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
-  
+
   // attempt to connect to Wifi network:
   Serial.println("");
   Serial.print("Connecting Wifi: ");
@@ -81,42 +74,6 @@ void handleNewMessages(int numNewMessages) {
     String from_name = bot.messages[i].from_name;
     if (from_name == "") from_name = "Guest";
 
-    if (text == "/showinfo") {
-      bot.sendMessage(chat_id, "Name: *" + from_name + "*.\nChat ID: *" + chat_id + "*.", "Markdown");
-    }
-    
-    if (text == "/ledon") {
-      digitalWrite(ledPin, LOW);   // turn the LED on (HIGH is the voltage level)
-      ledStatus = 1;
-      bot.sendSimpleMessage(chat_id, "Led is *ON*", "Markdown");
-    }
-
-    if (text == "/ledoff") {
-      ledStatus = 0;
-      digitalWrite(ledPin, HIGH);    // turn the LED off (LOW is the voltage level)
-      bot.sendSimpleMessage(chat_id, "Led is *OFF*", "Markdown");
-    }
-
-    if (text == "/status") {
-      if (ledStatus) {
-        bot.sendSimpleMessage(chat_id, "Led is *ON*", "Markdown");
-      } else {
-        bot.sendSimpleMessage(chat_id, "Led is *OFF*", "Markdown");
-      }
-    }
-    
-    if (text == "/books") {
-      bot.sendMessage(chat_id, "Тут можно купить *ШМАЛЮКЮ*", "Markdown");
-    }
-    if (text == "/speedshoes") {
-      bot.sendMessage(chat_id, "Тут можно купить *АМФЕТАМІНЧІК*", "Markdown");
-    }
-
-    if (text == "/options") {
-      String keyboardJson = "[[\"/books\", \"/speedshoes\"],[\"/ledon\", \"/ledoff\"],[\"/status\"]]";
-      bot.sendMessageWithReplyKeyboard(chat_id, "Choose from one of the following options", "", keyboardJson, true, false);
-    }
-
     if (text == "/start") {
       String welcome = "Welcome to Universal Arduino Telegram Bot library, " + from_name + ".\n";
       welcome += "This is Reply Keyboard Markup example.\n\n";
@@ -126,6 +83,12 @@ void handleNewMessages(int numNewMessages) {
       welcome += "/options : returns the reply keyboard\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
+
+    if (text == "/options") {
+      String keyboardJson = "[[\"/books\", \"/speedshoes\"],[\"/ledon\", \"/ledoff\"],[\"/status\"]]";
+      bot.sendMessageWithReplyKeyboard(chat_id, "Choose from one of the following options", "", keyboardJson, true, false);
+    }
+
   }
 }
 
@@ -136,4 +99,3 @@ void blinkBuitlinLed(int blinkCount) {
     digitalWrite(ledPin, HIGH);
   }
 }
-
