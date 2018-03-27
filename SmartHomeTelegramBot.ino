@@ -50,7 +50,7 @@ void setup() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   delay(10);
-  bot.sendMessage(fezChatID, "Bot started and connected!\n", "Markdown");
+  //bot.sendMessage(fezChatID, "Bot started and connected!\n", "Markdown");
 }
 void loop() {
   if (millis() > Bot_lasttime + Bot_mtbs)  {
@@ -89,14 +89,10 @@ void handleNewMessages(int numNewMessages) {
       welcome += "*1 -* _Балкон_\n";
       welcome += "*2 -* _Комната_\n";
       welcome += "*3 -* _Настройки_\n";
-      bot.sendMessage(chat_id, welcome, "Markdown");
+      //bot.sendMessage(chat_id, welcome, "Markdown");
+      String keyboardJson = "[[\"1\", \"2\", \"3\", \"4\"],[\"0\"]]";
+      bot.sendMessageWithReplyKeyboard(chat_id, welcome, "", keyboardJson, true, false);
     }
-
-    if (text == "/options") {
-      String keyboardJson = "[\"1\", \"2\", \"3\", \"4\", \"5\"]";
-      bot.sendMessageWithReplyKeyboard(chat_id, "Кнопки управления меню", "", keyboardJson, true, false);
-    }
-
   }
 }
 
