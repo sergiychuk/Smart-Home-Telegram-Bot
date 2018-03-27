@@ -87,18 +87,6 @@ void handleNewMessages(int numNewMessages) {
 
     if (text == "/start" || text == "0") {
       userChatChoise = (text).toInt();
-      String startMessage = "Добро пожаловать Бро *" + from_name + "*.\n\n";
-      startMessage += "`Это главное меню управления`\n";
-      startMessage += "`не очень умным домом.`\n\n";
-      startMessage += "`Что бы использовать меню,`\n";
-      startMessage += "`достаточно отправить в чат`\n";
-      startMessage += "`номер желаемой команды.`\n\n";
-      startMessage += "*Меню управления:*\n";
-      startMessage += "*1 -* _Балкон_\n";
-      startMessage += "*2 -* _Комната_\n";
-      startMessage += "*3 -* _Настройки_\n";
-      String keyboardJson = "[[\"1\", \"2\", \"3\"],[\"/status\"]]";
-      bot.sendMessageWithReplyKeyboard(chat_id, startMessage, "Markdown", keyboardJson, true);
     }
     if (text == "1") {
       userChatChoise = (text).toInt();
@@ -118,7 +106,7 @@ void handleNewMessages(int numNewMessages) {
     }
 
     menuChatNumber = userChatChoise;
-    setChatMenu(menuChatNumber, chat_id);
+    setChatMenu(menuChatNumber, chat_id, from_name);
     //    else {
     //      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
     //    }
@@ -126,9 +114,9 @@ void handleNewMessages(int numNewMessages) {
   }
 }
 
-void setChatMenu(int menuNum, String chat_id) {
+void setChatMenu(int menuNum, String chat_id, String user_name) {
   if (menuNum == 0) {
-    String startMessage = "Добро пожаловать Бро *" + from_name + "*.\n\n";
+    String startMessage = "Добро пожаловать Бро *" + user_name + "*.\n\n";
     startMessage += "`Это главное меню управления`\n";
     startMessage += "`не очень умным домом.`\n\n";
     startMessage += "`Что бы использовать меню,`\n";
