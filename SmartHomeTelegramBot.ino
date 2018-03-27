@@ -119,6 +119,8 @@ void handleNewMessages(int numNewMessages) {
     if (text == "/servoOn"){
       pinMode(4, OUTPUT);
       analogWrite(4, HIGH);
+      delay(1000);
+      analogWrite(4, LOW);
     }
     if (text == "/servoOff"){
       pinMode(4, INPUT);
