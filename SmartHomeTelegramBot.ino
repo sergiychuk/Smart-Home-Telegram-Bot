@@ -14,10 +14,11 @@ char password[] = "18273645"; // your network key
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
-int Bot_mtbs = 750; //mean time between scan messages
+int Bot_mtbs = 100; //mean time between scan messages
 long Bot_lasttime;   //last time messages' scan has been done
 
 const int ledPin = LED_BUILTIN;
+
 
 // MENU NUMBERS
 int menuChatNumber = 0;
@@ -33,7 +34,14 @@ void setup() {
   Serial.begin(115200);
 
   pinMode(ledPin, OUTPUT);
+  pinMode(4, OUTPUT);
   digitalWrite(ledPin, HIGH);
+//  for (int i = 0; i < 1023; i++){
+//    analogWrite(lightPin, i);
+//    delay(10);
+//    Serial.println(i);
+//  }
+  
   delay(25);
 
   // Set WiFi to station mode and disconnect from an AP if it was Previously connected
@@ -104,9 +112,17 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\nCurrent menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
       return;
     }
+    
+    //menuChatNumber = userChatChoise;
+    //setChatMenu(menuChatNumber, chat_id, from_name);
 
-    menuChatNumber = userChatChoise;
-    setChatMenu(menuChatNumber, chat_id, from_name);
+    if (text == "/servoOn"){
+      pinMode(4, OUTPUT);
+      analogWrite(4, HIGH);
+    }
+    if (text == "/servoOff"){
+      pinMode(4, INPUT);
+    }
     //    else {
     //      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
     //    }
