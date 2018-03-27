@@ -17,6 +17,8 @@ long Bot_lasttime;   //last time messages' scan has been done
 
 const int ledPin = LED_BUILTIN;
 
+int menuChatNum = 0;
+
 char* fezChatID = "391878473";
 
 void setup() {
@@ -75,18 +77,24 @@ void handleNewMessages(int numNewMessages) {
     if (from_name == "") from_name = "Guest";
 
     if (text == "/start") {
-      String welcome = "Welcome to Universal Arduino Telegram Bot library, " + from_name + ".\n";
-      welcome += "This is Reply Keyboard Markup example.\n\n";
-      welcome += "/ledon : to switch the Led ON\n";
-      welcome += "/ledoff : to switch the Led OFF\n";
-      welcome += "/status : Returns current status of LED\n";
-      welcome += "/options : returns the reply keyboard\n";
+      String welcome = "Добро пожаловать Бро *" + from_name + "*.\n\n";
+      
+      welcome += "`Это главное меню управления`\n";
+      welcome += "`не очень умным домом.`\n\n";
+      welcome += "`Что бы использовать меню,`\n";
+      welcome += "`достаточно отправить в чат`\n";
+      welcome += "`номер желаемой команды.`\n\n";
+      
+      welcome += "*Меню управления:*\n";
+      welcome += "*1 -* _Балкон_\n";
+      welcome += "*2 -* _Комната_\n";
+      welcome += "*3 -* _Настройки_\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
 
     if (text == "/options") {
-      String keyboardJson = "[[\"/books\", \"/speedshoes\"],[\"/ledon\", \"/ledoff\"],[\"/status\"]]";
-      bot.sendMessageWithReplyKeyboard(chat_id, "Choose from one of the following options", "", keyboardJson, true, false);
+      String keyboardJson = "[\"1\", \"2\", \"3\", \"4\", \"5\"]";
+      bot.sendMessageWithReplyKeyboard(chat_id, "Кнопки управления меню", "", keyboardJson, true, false);
     }
 
   }
