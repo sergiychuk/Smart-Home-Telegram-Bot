@@ -12,12 +12,13 @@ char password[] = "18273645"; // your network key
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
-int Bot_mtbs = 500; //mean time between scan messages
+int Bot_mtbs = 250; //mean time between scan messages
 long Bot_lasttime;   //last time messages' scan has been done
 
 const int ledPin = LED_BUILTIN;
 
-int menuChatNum = 0;
+int menuChatNumber = 0;
+int userChatChoise = 0;
 
 char* fezChatID = "391878473";
 
@@ -26,12 +27,13 @@ void setup() {
 
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, HIGH);
+  delay(25);
 
   // Set WiFi to station mode and disconnect from an AP if it was Previously connected
   Serial.println("");
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
-  delay(100);
+  delay(25);
 
   // attempt to connect to Wifi network:
   Serial.println("");
@@ -42,7 +44,7 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     blinkBuitlinLed(2);
-    delay(50);
+    //delay(50);
   }
 
   Serial.println("");
@@ -57,7 +59,7 @@ void loop() {
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
 
     while (numNewMessages) {
-      Serial.println("Got new response");
+      Serial.println("Got new response message");
       handleNewMessages(numNewMessages);
       numNewMessages = bot.getUpdates(bot.last_message_received + 1);
     }
@@ -66,7 +68,7 @@ void loop() {
   }
 }
 void handleNewMessages(int numNewMessages) {
-  Serial.println("handleNewMessages");
+  Serial.println("Working On New Messages");
   Serial.println(String(numNewMessages));
 
   for (int i = 0; i < numNewMessages; i++) {
@@ -76,23 +78,52 @@ void handleNewMessages(int numNewMessages) {
     String from_name = bot.messages[i].from_name;
     if (from_name == "") from_name = "Guest";
 
-    if (text == "/start") {
-      String welcome = "Добро пожаловать Бро *" + from_name + "*.\n\n";
+    if (text == "/start" || text == "0") {
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
       
+      String welcome = "Добро пожаловать Бро *" + from_name + "*.\n\n";
       welcome += "`Это главное меню управления`\n";
       welcome += "`не очень умным домом.`\n\n";
       welcome += "`Что бы использовать меню,`\n";
       welcome += "`достаточно отправить в чат`\n";
       welcome += "`номер желаемой команды.`\n\n";
-      
       welcome += "*Меню управления:*\n";
       welcome += "*1 -* _Балкон_\n";
       welcome += "*2 -* _Комната_\n";
       welcome += "*3 -* _Настройки_\n";
-      //bot.sendMessage(chat_id, welcome, "Markdown");
-      String keyboardJson = "[[\"1\", \"2\", \"3\", \"4\"],[\"0\"]]";
-      bot.sendMessageWithReplyKeyboard(chat_id, welcome, "", keyboardJson, true, false);
+      String keyboardJson = "[[\"4\", \"1\", \"2\", \"3\", \"4\"],[\"/status\"]]";
+      bot.sendMessageWithReplyKeyboard(chat_id, welcome, "Markdown", keyboardJson, true);
     }
+    if (text == "0"){
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+    }
+    if (text == "1"){
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+    }
+    if (text == "2"){
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+    }
+    if (text == "3"){
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+    }
+    if (text == "4"){
+      userChatChoise = (text).toInt();
+      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
+    }
+    if (text == "/status"){
+      bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\n", "Markdown");
+      bot.sendMessage(chat_id, "Current menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
+      return;
+    }
+//    else {
+//      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
+//    }
+    
   }
 }
 
@@ -103,3 +134,5 @@ void blinkBuitlinLed(int blinkCount) {
     digitalWrite(ledPin, HIGH);
   }
 }
+
+
