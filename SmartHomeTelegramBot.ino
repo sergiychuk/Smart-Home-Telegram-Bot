@@ -14,13 +14,18 @@ char password[] = "18273645"; // your network key
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
-int Bot_mtbs = 250; //mean time between scan messages
+int Bot_mtbs = 750; //mean time between scan messages
 long Bot_lasttime;   //last time messages' scan has been done
 
 const int ledPin = LED_BUILTIN;
 
+// MENU NUMBERS
 int menuChatNumber = 0;
 int userChatChoise = 0;
+
+// BALCONY NUMBERS
+bool fanStatus = false;
+bool lightStatus = false;
 
 char* fezChatID = "391878473";
 
@@ -95,30 +100,57 @@ void handleNewMessages(int numNewMessages) {
       String keyboardJson = "[[\"1\", \"2\", \"3\"],[\"/status\"]]";
       bot.sendMessageWithReplyKeyboard(chat_id, startMessage, "Markdown", keyboardJson, true);
     }
-    if (text == "1"){
+    if (text == "1") {
       userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
     }
-    if (text == "2"){
+    if (text == "2") {
       userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
     }
-    if (text == "3"){
+    if (text == "3") {
       userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
     }
-    if (text == "4"){
+    if (text == "4") {
       userChatChoise = (text).toInt();
-      bot.sendMessage(chat_id, "User number: *" + text + "*\n", "Markdown");
     }
-    if (text == "/status"){
+    if (text == "/status") {
       bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\nCurrent menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
       return;
     }
-//    else {
-//      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
-//    }
-    
+
+    menuChatNumber = userChatChoise;
+    setChatMenu(menuChatNumber, chat_id);
+    //    else {
+    //      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
+    //    }
+
+  }
+}
+
+void setChatMenu(int menuNum, String chat_id) {
+  if (menuNum == 0) {
+    String startMessage = "Добро пожаловать Бро *" + from_name + "*.\n\n";
+    startMessage += "`Это главное меню управления`\n";
+    startMessage += "`не очень умным домом.`\n\n";
+    startMessage += "`Что бы использовать меню,`\n";
+    startMessage += "`достаточно отправить в чат`\n";
+    startMessage += "`номер желаемой команды.`\n\n";
+    startMessage += "*Меню управления:*\n";
+    startMessage += "*1 -* _Балкон_\n";
+    startMessage += "*2 -* _Комната_\n";
+    startMessage += "*3 -* _Настройки_\n";
+    String keyboardJson = "[[\"1\", \"2\", \"3\"],[\"/status\"]]";
+    bot.sendMessageWithReplyKeyboard(chat_id, startMessage, "Markdown", keyboardJson, true);
+  }
+  if (menuNum == 1) {
+    String balconyMessage = "*БАЛКОН*.\n\n";
+    balconyMessage += "*Вытяжка:* _" + String(fanStatus) +"_.\n";
+    balconyMessage += "*Освещение:* _" + String(lightStatus) +"_.\n\n";
+    balconyMessage += "*Меню управления балконом:*\n";
+    balconyMessage += "*0 -* _Главное меню_\n";
+    balconyMessage += "*1 -* _Вытяжка_\n";
+    balconyMessage += "*2 -* _Освещение_\n";
+    String keyboardJson = "[[\"0\", \"1\", \"2\"]]";
+    bot.sendMessageWithReplyKeyboard(chat_id, balconyMessage, "Markdown", keyboardJson, true);
   }
 }
 
