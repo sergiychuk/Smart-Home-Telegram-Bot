@@ -3,6 +3,11 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
+#include "DHT.h"
+#define DHTPIN 4
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
 
 // Initialize Wifi connection to the router
 char ssid[] = "FEZ_DEZ";     // your network SSID (name)
@@ -33,8 +38,10 @@ char* fezChatID = "391878473";
 void setup() {
   Serial.begin(115200);
 
+  dht.begin();
+
   pinMode(ledPin, OUTPUT);
-  pinMode(4, OUTPUT);
+  //pinMode(4, OUTPUT);
   digitalWrite(ledPin, HIGH);
 //  for (int i = 0; i < 1023; i++){
 //    analogWrite(lightPin, i);
@@ -112,11 +119,25 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, "User chat choise number: *" + String(userChatChoise) + "*\nCurrent menu chat number: *" + String(menuChatNumber) + "*\n", "Markdown");
       return;
     }
+    if (text == "/dht"){
+      float h = dht.readHumidity();
+      float t = dht.readTemperature();
+      delay(10);
+      bot.sendMessage(chat_id, "Humidity: *" + String(h) + "%*\nTemperature: *" + String(t) + " °C*", "Markdown");
+    }
+    if (text == "/humidity") {
+      float h = dht.readHumidity();
+      bot.sendMessage(chat_id, "Humidity: *" + String(h) + "%*", "Markdown");
+    }
+    if (text == "/temperature") {
+      float t = dht.readTemperature();
+      bot.sendMessage(chat_id, "Temperature: *" + String(t) + " °C*", "Markdown");
+    }
     
     //menuChatNumber = userChatChoise;
     //setChatMenu(menuChatNumber, chat_id, from_name);
 
-    if (text == "/servoOn"){
+    /*if (text == "/servoOn"){
       pinMode(4, OUTPUT);
       analogWrite(4, HIGH);
       delay(1000);
@@ -124,7 +145,7 @@ void handleNewMessages(int numNewMessages) {
     }
     if (text == "/servoOff"){
       pinMode(4, INPUT);
-    }
+    }*/
     //    else {
     //      bot.sendMessage(chat_id, "Извините, я Вас не понял. Просто отправьте мне цифру меню\nили отправьте */start* чтобы открыть главное меню.", "Markdown");
     //    }
