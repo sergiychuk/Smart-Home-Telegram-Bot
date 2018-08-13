@@ -11,10 +11,10 @@ DHT dht(DHTPIN, DHTTYPE);
 
 // Initialize Wifi connection to the router
 char ssid[] = "FEZ_DEZ";     // your network SSID (name)
-char password[] = "18273645"; // your network key
+char password[] = "11111111"; // your network key
 
 // Initialize Telegram BOT
-#define BOTtoken "577387895:AAG7pnUscdGbhZ-kyEdAy0yRG3X11fXW8oA"  // your Bot Token (Get from Botfather)
+#define BOTtoken "577387895:AAG7pnUscdGbhZ-kyEdAy0yRG3X11fXW8oA"  // your Bot Token (Get from Botfather) Not working
 
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
